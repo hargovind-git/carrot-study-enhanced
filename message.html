@@ -4,72 +4,262 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Carrot Study App - Organize tasks, manage time, and boost productivity with a Pomodoro timer and task manager.">
-  <meta name="keywords" content="Task Manager, Productivity App, Pomodoro Timer, Study App">
-  <meta name="author" content="Carrot Studio">
-  <title>Carrot Study App 🥕</title>
+  <title>Study Buddy App</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* General Styles */
+    body {
+      font-family: "Arial", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f4f8;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #4caf50;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #4caf50;
+      border-bottom: 2px solid #4caf50;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #e8f5e9;
+      border: 1px solid #c8e6c9;
+      border-radius: 5px;
+    }
+
+    .task-item img {
+      max-width: 50px;
+      margin-left: 10px;
+    }
+
+    .task-buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    .task-buttons button {
+      font-size: 14px;
+      padding: 5px 10px;
+    }
+
+    .task-note {
+      margin-top: 10px;
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .timer {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .timer-display {
+      font-size: 2rem;
+      margin: 20px 0;
+      color: #4caf50;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 8px;
+      }
+    }
+  </style>
 </head>
 
 <body>
   <header>
-    <h1>Carrot Study App 🥕</h1>
-    <p>Your ultimate productivity companion!</p>
+    <h1>Study Buddy App 📚</h1>
   </header>
 
-  <main class="container">
-    <!-- Add Task Section -->
-    <section class="task-section">
-      <h2>Add a New Task</h2>
-      <form id="taskForm" aria-label="Add new task">
-        <label for="taskInput">Task</label>
-        <input type="text" id="taskInput" placeholder="Enter your task" required>
-
-        <label for="emojiInput">Emoji (optional)</label>
-        <input type="text" id="emojiInput" placeholder="Add an emoji">
-
-        <label for="fileInput">Upload an Image</label>
+  <div class="container">
+    <section>
+      <h2>Add New Task</h2>
+      <form id="taskForm">
+        <input type="text" id="taskInput" placeholder="Enter your task here" required>
+        <input type="text" id="emojiInput" placeholder="Emoji (optional)">
         <input type="file" id="fileInput" accept="image/*">
-
         <button type="submit">Add Task</button>
       </form>
     </section>
 
-    <!-- Task List Section -->
     <section>
       <h2>Your Tasks</h2>
-      <ul id="taskList" aria-live="polite">
-        <!-- Tasks will be dynamically added here -->
+      <ul id="taskList">
+        <!-- Tasks will be added here dynamically -->
       </ul>
     </section>
 
-    <!-- Study Schedule Section -->
     <section>
-      <h2>Study Schedule</h2>
-      <iframe
-        src="https://calendar.google.com/calendar/embed?src=islamdev99%40gmail.com&ctz=UTC"
-        style="border: 0" frameborder="0" scrolling="no"
-        aria-label="Google Calendar Study Schedule">
-      </iframe>
-    </section>
-
-    <!-- Pomodoro Timer Section -->
-    <section class="timer-section">
       <h2>Pomodoro Timer</h2>
-      <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
-      <div class="timer-controls">
+      <div class="timer">
+        <div class="timer-display" id="timerDisplay">25:00</div>
         <button id="startTimer">Start</button>
         <button id="stopTimer">Stop</button>
         <button id="resetTimer">Reset</button>
       </div>
     </section>
-  </main>
+  </div>
 
-  <footer>
-    <p>© 2025 Carrot Studio. All Rights Reserved.</p>
-  </footer>
+  <script>
+    // Task functionality
+    const taskForm = document.getElementById('taskForm');
+    const taskList = document.getElementById('taskList');
 
-  <script src="script.js"></script>
+    taskForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const taskText = document.getElementById('taskInput').value;
+      const emojiText = document.getElementById('emojiInput').value || '📌';
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      const imgSrc = file ? URL.createObjectURL(file) : '';
+
+      const li = document.createElement('li');
+      li.classList.add('task-item');
+      li.innerHTML = `
+        <span>
+          <span>${emojiText}</span> ${taskText}
+          ${imgSrc ? `<img src="${imgSrc}" alt="Task Image">` : ''}
+        </span>
+        <div class="task-buttons">
+          <button class="complete-task">Complete</button>
+          <button class="delete-task">Delete</button>
+        </div>
+        <textarea class="task-note" placeholder="Add a note..."></textarea>
+      `;
+
+      taskList.appendChild(li);
+
+      // Clear input fields
+      document.getElementById('taskInput').value = '';
+      document.getElementById('emojiInput').value = '';
+      fileInput.value = '';
+
+      // Add functionality to buttons
+      li.querySelector('.complete-task').addEventListener('click', function () {
+        li.classList.toggle('completed');
+      });
+
+      li.querySelector('.delete-task').addEventListener('click', function () {
+        li.remove();
+      });
+    });
+
+    // Timer functionality
+    // Timer functionality
+let timer;
+let timeLeft = 1500; // 25 minutes in seconds
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function startTimer() {
+  if (timer) clearInterval(timer); // Clear any existing timer
+  timer = setInterval(function () {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateTimerDisplay();
+    } else {
+      clearInterval(timer);
+      alert('Time is up!');
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  if (timer) clearInterval(timer);
+}
+
+function resetTimer() {
+  if (timer) clearInterval(timer);
+  timeLeft = 1500;
+  updateTimerDisplay();
+}
+
+// Event listeners
+document.getElementById('startTimer').addEventListener('click', startTimer);
+document.getElementById('stopTimer').addEventListener('click', stopTimer);
+document.getElementById('resetTimer').addEventListener('click', resetTimer);
+
+// Initial display update
+updateTimerDisplay();
+
+  </script>
 </body>
 
 </html>
