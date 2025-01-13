@@ -1,4 +1,4 @@
-// Task Form Submission
+// Add Task Functionality
 const taskForm = document.getElementById('taskForm');
 const taskList = document.getElementById('taskList');
 
@@ -6,11 +6,9 @@ taskForm.addEventListener('submit', function (e) {
   e.preventDefault();
   const taskText = document.getElementById('taskInput').value;
   const emoji = document.getElementById('emojiInput').value || '🥕';
-  const fileInput = document.getElementById('fileInput');
-  const file = fileInput.files[0];
+  const file = document.getElementById('fileInput').files[0];
   const imgSrc = file ? URL.createObjectURL(file) : '';
 
-  // Create a new task list item
   const li = document.createElement('li');
   li.innerHTML = `
     <span>${emoji} ${taskText}</span>
@@ -18,13 +16,12 @@ taskForm.addEventListener('submit', function (e) {
   `;
   taskList.appendChild(li);
 
-  // Reset the form
   taskForm.reset();
 });
 
 // Pomodoro Timer
 let timer;
-let timeLeft = 1500; // 25 minutes
+let timeLeft = 1500;
 
 function updateTimerDisplay() {
   const minutes = Math.floor(timeLeft / 60);
@@ -40,7 +37,7 @@ document.getElementById('startTimer').addEventListener('click', function () {
       updateTimerDisplay();
     } else {
       clearInterval(timer);
-      alert('Time is up! Take a break.');
+      alert('Time is up!');
     }
   }, 1000);
 });
@@ -51,7 +48,7 @@ document.getElementById('stopTimer').addEventListener('click', function () {
 
 document.getElementById('resetTimer').addEventListener('click', function () {
   clearInterval(timer);
-  timeLeft = 1500; // Reset to 25 minutes
+  timeLeft = 1500;
   updateTimerDisplay();
 });
 

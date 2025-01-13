@@ -4,55 +4,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carrot Study App</title>
+  <meta name="description" content="Carrot Study App - Organize tasks, manage time, and boost productivity with a Pomodoro timer and task manager.">
+  <meta name="keywords" content="Task Manager, Productivity App, Pomodoro Timer, Study App">
+  <meta name="author" content="Carrot Studio">
+  <title>Carrot Study App 🥕</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <header>
     <h1>Carrot Study App 🥕</h1>
+    <p>Your ultimate productivity companion!</p>
   </header>
 
-  <div class="container">
-    <!-- Add New Task -->
+  <main class="container">
+    <!-- Add Task Section -->
     <section class="task-section">
-      <h2>Add New Task</h2>
-      <form id="taskForm">
+      <h2>Add a New Task</h2>
+      <form id="taskForm" aria-label="Add new task">
+        <label for="taskInput">Task</label>
         <input type="text" id="taskInput" placeholder="Enter your task" required>
-        <input type="text" id="emojiInput" placeholder="Enter an emoji (optional)">
+
+        <label for="emojiInput">Emoji (optional)</label>
+        <input type="text" id="emojiInput" placeholder="Add an emoji">
+
+        <label for="fileInput">Upload an Image</label>
         <input type="file" id="fileInput" accept="image/*">
+
         <button type="submit">Add Task</button>
       </form>
     </section>
 
-    <!-- Task List -->
+    <!-- Task List Section -->
     <section>
       <h2>Your Tasks</h2>
-      <ul id="taskList">
+      <ul id="taskList" aria-live="polite">
         <!-- Tasks will be dynamically added here -->
       </ul>
     </section>
 
-    <!-- Study Schedule -->
+    <!-- Study Schedule Section -->
     <section>
       <h2>Study Schedule</h2>
-      <iframe src="https://calendar.google.com/calendar/embed?src=islamdev99%40gmail.com&ctz=UTC" 
-              style="border: 0" width="800" height="600" frameborder="0" scrolling="no">
+      <iframe
+        src="https://calendar.google.com/calendar/embed?src=islamdev99%40gmail.com&ctz=UTC"
+        style="border: 0" frameborder="0" scrolling="no"
+        aria-label="Google Calendar Study Schedule">
       </iframe>
     </section>
 
-    <!-- Timer -->
-    <section>
+    <!-- Pomodoro Timer Section -->
+    <section class="timer-section">
       <h2>Pomodoro Timer</h2>
       <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
-      <button id="startTimer">Start</button>
-      <button id="stopTimer">Stop</button>
-      <button id="resetTimer">Reset</button>
+      <div class="timer-controls">
+        <button id="startTimer">Start</button>
+        <button id="stopTimer">Stop</button>
+        <button id="resetTimer">Reset</button>
+      </div>
     </section>
-  </div>
+  </main>
 
   <footer>
-    <p>Developed by Carrot Studio. Open Source. Feel free to modify after permission from Carrot Studio.</p>
+    <p>© 2025 Carrot Studio. All Rights Reserved.</p>
   </footer>
 
   <script src="script.js"></script>
