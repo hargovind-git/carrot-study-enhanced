@@ -1,176 +1,61 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تطبيق مذاكرة كاروت</title>
+  <title>Carrot Study App</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .task-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 10px 0;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-    }
-
-    .task-item img {
-      max-width: 50px;
-      max-height: 50px;
-      margin-left: 10px;
-    }
-
-    .progress-buttons {
-      margin-left: 20px;
-    }
-
-    .note-input {
-      width: 100%;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 5px;
-    }
-
-    .complete-task {
-      margin-left: 20px;
-      cursor: pointer;
-      color: green;
-      font-weight: bold;
-    }
-
-    .completed {
-      text-decoration: line-through;
-      color: gray;
-    }
-  </style>
 </head>
 
 <body>
   <header>
-    <h1>تطبيق مذاكرة كاروت 🥕</h1>
+    <h1>Carrot Study App 🥕</h1>
   </header>
+
   <div class="container">
-    <section>
-      <h2>إضافة مهمة جديدة</h2>
+    <!-- Add New Task -->
+    <section class="task-section">
+      <h2>Add New Task</h2>
       <form id="taskForm">
-        <input type="text" id="taskInput" placeholder="أدخل المهمة هنا" required>
-        <input type="text" id="emojiInput" placeholder="إيموجي">
-        <input type="file" id="fileInput" accept="image/*" placeholder="رفع ملف المهمة">
-        <button type="submit">إضافة المهمة</button>
+        <input type="text" id="taskInput" placeholder="Enter your task" required>
+        <input type="text" id="emojiInput" placeholder="Emoji">
+        <input type="file" id="fileInput" accept="image/*">
+        <button type="submit">Add Task</button>
       </form>
     </section>
 
+    <!-- Task List -->
     <section>
-      <h2>المهام الخاصة بك</h2>
+      <h2>Your Tasks</h2>
       <ul id="taskList">
-        <!-- سيتم إضافة المهام هنا -->
+        <!-- Tasks will be dynamically added here -->
       </ul>
     </section>
 
+    <!-- Study Schedule -->
     <section>
-      <h2>جدول المذاكرة</h2>
-      <iframe src="https://calendar.google.com/calendar/embed?src=islamdev99%40gmail.com&ctz=UTC" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+      <h2>Study Schedule</h2>
+      <iframe src="https://calendar.google.com/calendar/embed?src=islamdev99%40gmail.com&ctz=UTC" 
+              style="border: 0" width="800" height="600" frameborder="0" scrolling="no">
+      </iframe>
     </section>
 
+    <!-- Timer -->
     <section>
-      <h2>المؤقت</h2>
-      <div class="tomato-timer" id="tomatoTimer">25:00</div>
-      <button id="startTimer">ابدأ</button>
-      <button id="stopTimer">إيقاف</button>
-      <button id="resetTimer">إعادة تعيين</button>
-      <input type="file" id="soundFile" accept="audio/*" placeholder="اختر نغمة">
-      <input type="file" id="timerSoundFile" accept="audio/*" placeholder="اختر نغمة المؤقت">
+      <h2>Pomodoro Timer</h2>
+      <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+      <button id="startTimer">Start</button>
+      <button id="stopTimer">Stop</button>
+      <button id="resetTimer">Reset</button>
     </section>
   </div>
 
-  <p id="developer-info">تم تطوير هذا التطبيق بواسطة كاروت ستوديو، وهو مفتوح المصدر، ويمكن لأي شخص تعديله بعد إذن كاروت ستوديو.</p>
+  <footer>
+    <p>Developed by Carrot Studio. Open Source. Feel free to modify after permission from Carrot Studio.</p>
+  </footer>
 
-  <script>
-    // وظيفة لإضافة المهمة إلى القائمة
-    const taskForm = document.getElementById('taskForm');
-    const taskInput = document.getElementById('taskInput');
-    const taskList = document.getElementById('taskList');
-    const emojiInput = document.getElementById('emojiInput');
-    taskForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const taskText = taskInput.value;
-      const emojiText = emojiInput.value ? emojiInput.value : "🥕"; // استخدام الإيموجي المُدخل أو الجزر الافتراضي
-      const fileInput = document.getElementById('fileInput');
-      const file = fileInput.files[0];
-      const imgSrc = file ? URL.createObjectURL(file) : '';
-
-      const li = document.createElement('li');
-      li.classList.add('task-item');
-      li.innerHTML = `
-        <span>
-          <span class="emoji-carrot">${emojiText}</span> ${taskText}
-          ${imgSrc ? `<img src="${imgSrc}" alt="صورة المهمة">` : ''}
-        </span>
-        <div class="progress-buttons">
-          <button class="complete-task" data-progress="25">✅ 25%</button>
-          <button class="complete-task" data-progress="50">✅ 50%</button>
-          <button class="complete-task" data-progress="75">✅ 75%</button>
-          <button class="complete-task" data-progress="100">✅ 100%</button>
-        </div>
-        <textarea class="note-input" placeholder="اكتب ملاحظاتك هنا..."></textarea>
-      `;
-
-      taskList.appendChild(li);
-      taskInput.value = '';
-      emojiInput.value = '';
-      fileInput.value = '';
-
-      const completeButtons = li.querySelectorAll('.complete-task');
-      completeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const progress = this.dataset.progress;
-          li.classList.toggle('completed');
-          li.querySelector('.note-input').disabled = true; // تعطيل حقل الملاحظات بعد الانتهاء
-          li.querySelector('.note-input').value += `\nتم الانتهاء بنسبة ${progress}%`;
-          this.parentNode.style.display = 'none'; // إخفاء أزرار التقدم
-        });
-      });
-    });
-
-    // إعدادات المؤقت
-    let timer;
-    let timeLeft = 1500; // 25 دقيقة
-    function updateTimerDisplay() {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      document.getElementById('tomatoTimer').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }
-
-    document.getElementById('startTimer').addEventListener('click', function() {
-      clearInterval(timer);
-      timer = setInterval(function() {
-        timeLeft--;
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          alert('وقت العمل انتهى! وقت الراحة الآن!');
-          timeLeft = 1500; // إعادة تعيين الوقت
-        }
-        updateTimerDisplay();
-      }, 1000);
-    });
-
-    document.getElementById('stopTimer').addEventListener('click', function() {
-      clearInterval(timer);
-    });
-
-    document.getElementById('resetTimer').addEventListener('click', function() {
-      clearInterval(timer);
-      timeLeft = 1500; // إعادة تعيين الوقت
-      updateTimerDisplay();
-    });
-
-    updateTimerDisplay();
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>
