@@ -10,6 +10,7 @@ taskForm.addEventListener('submit', function (e) {
   const file = fileInput.files[0];
   const imgSrc = file ? URL.createObjectURL(file) : '';
 
+  // Create a new task list item
   const li = document.createElement('li');
   li.innerHTML = `
     <span>${emoji} ${taskText}</span>
@@ -34,12 +35,13 @@ function updateTimerDisplay() {
 document.getElementById('startTimer').addEventListener('click', function () {
   clearInterval(timer);
   timer = setInterval(() => {
-    timeLeft--;
-    if (timeLeft <= 0) {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateTimerDisplay();
+    } else {
       clearInterval(timer);
       alert('Time is up! Take a break.');
     }
-    updateTimerDisplay();
   }, 1000);
 });
 
